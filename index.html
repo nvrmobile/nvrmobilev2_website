@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NVRMobile V2 - 行動影像監控應用程式</title>
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2980b9;
+            --dark: rgb(23, 23, 23);
+            --gray: #333333;
+            --light-gray: #555555;
+            --text: #f5f5f5;
+            --accent: #e74c3c;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            background-image: url('https://cdnjs.cloudflare.com/ajax/libs/simple-icons/3.0.1/simple-icons.svg');
+            background-size: 400px;
+            background-repeat: repeat;
+            background-blend-mode: overlay;
+            background-attachment: fixed;
+            background-opacity: 0.05;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .glassmorphism {
+            background: rgba(35, 35, 35, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(50, 50, 50, 0.18);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            margin-bottom: 30px;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .glassmorphism:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
+        }
+        
+        header {
+            text-align: center;
+            padding: 40px 0;
+        }
+        
+        .logo {
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+            background-color: var(--primary);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 24px;
+            font-weight: bold;
+            box-shadow: 0 0 30px 15px rgba(52, 152, 219, 0.6), 0 0 50px 20px rgba(52, 152, 219, 0.3);
+            position: relative;
+            z-index: 2;
+            overflow: visible;
+        }
+        
+        .logo::before {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            right: -10px;
+            bottom: -10px;
+            background: var(--primary);
+            z-index: -1;
+            border-radius: 40px;
+            filter: blur(20px);
+            opacity: 0.6;
+        }
+        
+        h1 {
+            font-size: 42px;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+        
+        .tagline {
+            font-size: 20px;
+            margin-bottom: 30px;
+            color: var(--primary);
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .cta-button {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            padding: 12px 30px;
+            background: var(--primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 18px;
+            transition: all 0.3s ease;
+            min-width: 200px;
+        }
+        
+        .cta-button:hover {
+            background: var(--secondary);
+            transform: translateY(-2px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+        }
+        
+        .cta-button.soon {
+            background: var(--light-gray);
+            cursor: not-allowed;
+        }
+        
+        section {
+            margin-bottom: 50px;
+        }
+        
+        h2 {
+            font-size: 28px;
+            margin-bottom: 20px;
+            color: var(--text);
+            position: relative;
+            padding-bottom: 10px;
+        }
+        
+        h2:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+        
+        p {
+            font-size: 16px;
+            line-height: 1.7;
+            margin-bottom: 20px;
+            color: #cccccc;
+        }
+        
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+        
+        .feature-card {
+            padding: 25px;
+            background: rgba(35, 35, 35, 0.8);
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            border-radius: 15px;
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(60, 60, 60, 0.3);
+        }
+        
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+        }
+        
+        .feature-icon {
+            background: var(--primary);
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            color: white;
+            font-size: 24px;
+            position: relative;
+            box-shadow: 0 0 20px 5px rgba(52, 152, 219, 0.5);
+        }
+        
+        .feature-icon::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            background: var(--primary);
+            z-index: -1;
+            border-radius: 20px;
+            filter: blur(10px);
+            opacity: 0.6;
+        }
+        
+        .feature-title {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--text);
+        }
+        
+        ul {
+            margin-left: 20px;
+            margin-bottom: 20px;
+            color: #bbbbbb;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .notice {
+            background: rgba(231, 76, 60, 0.15);
+            border-left: 4px solid var(--accent);
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+
+        .store-link {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .store-button {
+            display: inline-block;
+            padding: 15px 25px;
+            border-radius: 10px;
+            background: #000;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: transform 0.3s ease;
+            margin: 10px;
+            min-width: 180px;
+            text-align: center;
+        }
+        
+        .store-button:hover {
+            transform: scale(1.05);
+        }
+        
+        .store-button.apple {
+            background: #000;
+            border: 1px solid #444;
+        }
+        
+        .store-button.google {
+            background: #202124;
+            border: 1px solid #444;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: #888888;
+            font-size: 14px;
+        }
+        
+        @media (max-width: 768px) {
+            .features {
+                grid-template-columns: 1fr;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            h1 {
+                font-size: 32px;
+            }
+            
+            .tagline {
+                font-size: 18px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">NVR</div>
+            <h1>NVRMobile V2</h1>
+            <p class="tagline">您隨時隨地的影像監控解決方案</p>
+        </div>
+    </header>
+    
+    <main class="container">
+        <section class="glassmorphism">
+            <h2>簡介</h2>
+            <p>NVRMobile V2 是一款行動影像監控應用程式，旨在遠端監控 DIGIEVER NVR 的影像，並透過行動裝置觀看即時畫面。無論您身在何處，都可以使用它來監控即時高品質影像，並快速找到錄製的影像，以守護您的區域並預防潛在事件。此外，NVRMobile V2 允許您透過日誌列表進行快速故障排除。</p>
+            
+            <div class="store-link">
+                <a href="#" class="store-button apple">App Store<br><small>(即將推出)</small></a>
+                <a href="#" class="store-button google">Google Play<br><small>(即將推出)</small></a>
+            </div>
+        </section>
+        
+        <section class="glassmorphism">
+            <h2>主要功能</h2>
+            <div class="features">
+                <div class="feature-card">
+                    <div class="feature-icon">📹</div>
+                    <h3 class="feature-title">即時觀看</h3>
+                    <ul>
+                        <li>多支手機同時觀看影像</li>
+                        <li>支援即時影像觀看</li>
+                        <li>支援硬體解碼</li>
+                        <li>壓縮格式：H.264、H.265</li>
+                        <li>顯示模式：1/2/4/6/9/12/16 和循序模式</li>
+                        <li>支援 PTZ 控制</li>
+                        <li>支援雙指縮放</li>
+                        <li>支援音訊</li>
+                        <li>支援 NVR 所有頻道的繼電器</li>
+                        <li>支援頻寬節省器</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⏪</div>
+                    <h3 class="feature-title">回放</h3>
+                    <ul>
+                        <li>支援快速回放</li>
+                        <li>回放速度控制</li>
+                        <li>時間軸</li>
+                        <li>支援音訊</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">⭐</div>
+                    <h3 class="feature-title">我的最愛</h3>
+                    <ul>
+                        <li>支援多台 NVR</li>
+                    </ul>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon">🔍</div>
+                    <h3 class="feature-title">其他功能</h3>
+                    <ul>
+                        <li>透過 EZSearch 快速新增區域網路中的 NVR</li>
+                        <li>直接透過應用程式控制 NVR 即時觀看</li>
+                        <li>快速事件排序方法</li>
+                        <li>即時事件通知</li>
+                        <li>推播事件通知</li>
+                        <li>雙向音訊</li>
+                        <li>多國語言</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="notice">
+                <p><strong>注意事項：</strong></p>
+                <ul>
+                    <li>建議使用韌體版本 2.1.x.63 或更高版本的 NVR 使用此應用程式。</li>
+                    <li>為了獲得更好的效能，建議使用 iPAD Pro 和 iPhone 6s 或更新的型號。</li>
+                </ul>
+            </div>
+        </section>
+        
+        <section class="glassmorphism">
+            <h2>下載應用程式</h2>
+            <p>NVRMobile V2 即將在 App Store 和 Google Play 上發布。請密切關注最新消息！</p>
+            
+            <div class="cta-buttons">
+                <a href="#" class="cta-button soon">App Store 下載<br><small>(即將推出)</small></a>
+                <a href="#" class="cta-button soon">Google Play 下載<br><small>(即將推出)</small></a>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 DIGIEVER. 保留所有權利。</p>
+        </div>
+    </footer>
+</body>
+</html>
